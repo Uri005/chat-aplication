@@ -61,7 +61,6 @@ export default function MessageFormUI({
               setPreview("");
               handleSubmit();
             }} 
-          
           />
         </div>
       </div>

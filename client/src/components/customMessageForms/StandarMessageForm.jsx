@@ -14,9 +14,9 @@ export default function StandarMessageForm({ props, activeChat }) {
 
     const at = attachment ? [{ blob: attachment, file: attachment.name }] : []
     const form = {
-      attachment: at,
+      attachments: at,
       created: date,
-      sener_username: props.username,
+      sender_username: props.username,
       text: message,
       activeChatId: activeChat.id
     }
