@@ -7,6 +7,8 @@ export default function MessageFormUI({
   message,
   handleChange,
   handleSubmit,
+  appendText,
+  handleKeyDown,
 }) {
   const [preview, setPreview] = useState("")
   return (
@@ -30,8 +32,16 @@ export default function MessageFormUI({
             type="text"
             value={message}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             placeholder="Send a message..."
           />
+          {appendText && (
+            <input className="message-form-assist"
+              type="text"
+              disable="disable"
+              value={`${message} ${appendText}`}
+            />
+          )}
         </div>
         <div className="message-form-icons">
           <Dropzone 
