@@ -6,11 +6,11 @@ import Ai from '../customMessageForms/Ai';
 import AiCode from '../customMessageForms/AiCode';
 import AiAssist from '../customMessageForms/AiAssist';
 
-export default function Chat() {
+export default function Chat(user, secret) {
   const chatProps = useMultiChatLogic(
     import.meta.env.VITE_PROJECT_ID,
-    "personal", 
-    "1234"
+    user,
+    secret
   )
   
   return (
