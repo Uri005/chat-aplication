@@ -5,6 +5,7 @@ const router = express.Router();
 
 router.post("/login", async (req, res) => {
   try {
+    console.log("req.body", req.body)
     const { username, password } = req.body;
 
     const chatEngineResponse = await axios.get(

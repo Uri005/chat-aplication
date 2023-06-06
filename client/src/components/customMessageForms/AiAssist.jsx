@@ -1,35 +1,36 @@
 import { usePostAiAssistMutation } from "@/state/api";
-import React, { useEffect, useState } from 'react'
-import MessageFormUI from './MessageFormUI';
+import React, { useEffect, useState } from "react";
+import MessageFormUI from "./MessageFormUI";
 
-function useDebounce(value, delay){
+function useDebounce(value, delay) {
   const [debouncedValue, setDebouncedValue] = useState(value);
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
-    
+      setDebouncedValue(value);
+    }, delay);
+
     return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
 }
 
-export default function AiAssist ({ props, activeChat }) {
-
+const AiAssist = ({ props, activeChat }) => {
   const [message, setMessage] = useState("");
   const [attachment, setAttachment] = useState("");
   const [triggerAssist, resultAssist] = usePostAiAssistMutation();
   const [appendText, setAppendText] = useState("");
+
   const handleChange = (e) => setMessage(e.target.value);
 
   const handleSubmit = async () => {
-    const date = new Date().toISOString()
-    .replace("T", " ")
-    .replace("Z", `${Math.floor(Math.random() * 1000)}+00:00`);
-
+    const date = new Date()
+      .toISOString()
+      .replace("T", " ")
+      .replace("Z", `${Math.floor(Math.random() * 1000)}+00:00`);
     const at = attachment ? [{ blob: attachment, file: attachment.name }] : [];
     const form = {
       attachments: at,
@@ -43,39 +44,41 @@ export default function AiAssist ({ props, activeChat }) {
     setMessage("");
     setAttachment("");
   };
-  const debouncedValue = useDebounce(message, 1000); 
+
+  const debouncedValue = useDebounce(message, 1000);
 
   useEffect(() => {
-    if(debouncedValue){
+    if (debouncedValue) {
       const form = { text: message };
-      triggerAssist(form)
+      triggerAssist(form);
     }
-  }, [debouncedValue]) // eslint-disable-line
+  }, [debouncedValue]); // eslint-disable-line
 
   const handleKeyDown = (e) => {
-    if(e.keyCode === 9 || e.keyCode === 13){
+    // handle enter and tab
+    if (e.keyCode === 9 || e.keyCode === 13) {
       e.preventDefault();
-      setMessage(`${message} ${appendText}`)
+      setMessage(`${message} ${appendText}`);
     }
     setAppendText("");
-  }
+  };
 
   useEffect(() => {
-    if(resultAssist.data?.text){
-      setAppendText(resultAssist.data?.text)
+    if (resultAssist.data?.text) {
+      setAppendText(resultAssist.data?.text);
     }
-  }, [resultAssist]);
+  }, [resultAssist]); // eslint-disable-line
 
   return (
-    <MessageFormUI 
+    <MessageFormUI
       setAttachment={setAttachment}
       message={message}
       handleChange={handleChange}
       handleSubmit={handleSubmit}
-    
       appendText={appendText}
       handleKeyDown={handleKeyDown}
-    />  
-  )
+    />
+  );
+};
 
-}
+export default AiAssist;
